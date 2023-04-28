@@ -1,10 +1,11 @@
 package com.ms.admin.catalog.domain.category;
 
+import com.ms.admin.catalog.domain.AggregateRoot;
+
 import java.time.Instant;
 import java.util.UUID;
 
-public class Category {
-    private String id;
+public class Category extends AggregateRoot<CategoryID> {
     private String name;
     private String description;
     private boolean active;
@@ -14,7 +15,7 @@ public class Category {
 
 
     private Category(
-            final String id,
+            final CategoryID id,
             final String name,
             final String description,
             final boolean active,
@@ -22,7 +23,7 @@ public class Category {
             final Instant updatedAt,
             final Instant deletedAt
     ) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.description = description;
         this.active = active;
@@ -37,13 +38,13 @@ public class Category {
             final boolean isActive
     ) {
 
-        final var id = UUID.randomUUID().toString();
+        final var id = CategoryID.unique();
         final var now = Instant.now();
         return new Category(id, name, description, isActive, now, now, null);
     }
 
 
-    public String getId() {
+    public CategoryID getId() {
         return id;
     }
 
