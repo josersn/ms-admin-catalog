@@ -1,6 +1,7 @@
 package com.ms.admin.catalog.domain.category;
 
 import com.ms.admin.catalog.domain.AggregateRoot;
+import com.ms.admin.catalog.domain.validation.ValidationHandler;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -41,6 +42,11 @@ public class Category extends AggregateRoot<CategoryID> {
         final var id = CategoryID.unique();
         final var now = Instant.now();
         return new Category(id, name, description, isActive, now, now, null);
+    }
+
+    @Override
+    public void validate(ValidationHandler handler) {
+        new CategoryValidator(this, handler).validate();
     }
 
 

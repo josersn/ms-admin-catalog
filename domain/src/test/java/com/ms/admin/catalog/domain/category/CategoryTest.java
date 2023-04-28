@@ -1,5 +1,7 @@
 package com.ms.admin.catalog.domain.category;
 
+import com.ms.admin.catalog.domain.exceptions.DomainException;
+import com.ms.admin.catalog.domain.validation.handler.ThrowsValidationHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +30,7 @@ public class CategoryTest {
     public  void givenAnInvalidNullName_whenCallNewCategoryAndValidate_thenShouldReceiveError () {
 
         final String expectedName = null;
-        final var expectedErrorMessage = "'name'is required";
+        final var expectedErrorMessage = "'name' is required";
         final var expectedErrorCount = 1;
         final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = true;
@@ -36,10 +38,10 @@ public class CategoryTest {
 
         final var category = Category.newCategory(expectedName, expectedDescription, expectedIsActive);
 
-        final var companyException = Assertions.assertThrows(DomainExectiption.class, () -> category.validate);
+        final var companyException = Assertions.assertThrows(DomainException.class, () -> category.validate(new ThrowsValidationHandler()));
 
-        Assertions.assertEquals(expectedErrorMessage,companyException.getErrors().get(0));
-        Assertions.assertEquals(expectedErrorCount,companyException.getErrors().get().size());
+        Assertions.assertEquals(expectedErrorMessage,companyException.getErrors().get(0).message());
+        Assertions.assertEquals(expectedErrorCount,companyException.getErrors().size());
 
     }
 }
