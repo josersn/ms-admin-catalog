@@ -4,8 +4,6 @@ import com.ms.admin.catalog.domain.category.Category;
 
 import java.util.UUID;
 
-public class UseCase {
-    public Category execute () {
-        return  Category.newCategory("nome", "description", false);
-    }
+public abstract class UseCase<Payload , Response> {
+    public abstract Response execute(Payload payload);
 }
