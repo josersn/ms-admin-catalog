@@ -5,6 +5,7 @@ import com.ms.admin.catalog.domain.category.CategoryGateway;
 import com.ms.admin.catalog.domain.category.CategoryID;
 import com.ms.admin.catalog.domain.exceptions.DomainException;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +27,12 @@ public class UpdateCategoryUseCaseTest {
 
     @Mock
     private CategoryGateway gateway;
+
+    @BeforeEach
+    void cleanUp() {
+        Mockito.reset(gateway);
+    }
+
     @Test
     public void givenAValidCommand_whenCallsUpdateCategory_shouldReturnCategoryId() {
         final var expectedName = "filmes";

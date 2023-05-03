@@ -3,6 +3,7 @@ package com.ms.admin.catalog.application.category.create;
 import com.ms.admin.catalog.domain.category.CategoryGateway;
 import com.ms.admin.catalog.domain.exceptions.DomainException;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +27,10 @@ public class CreateCategoryUseCaseTest {
     @Mock
     private CategoryGateway gateway;
 
+    @BeforeEach
+    void cleanUp() {
+        Mockito.reset(gateway);
+    }
 
     @Test
     public  void givenAValidaCommand_whenCallsCreateCategory_shouldReturnCategoryId(){
