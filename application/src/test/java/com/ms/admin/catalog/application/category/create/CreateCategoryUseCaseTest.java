@@ -41,7 +41,7 @@ public class CreateCategoryUseCaseTest {
 
         final var useCase = new DefaultCreateCategoryUseCase(gateway);
 
-        final var company = useCase.execute(sut);
+        final var company = useCase.execute(sut).get();
 
         Assertions.assertNotNull(company);
         Assertions.assertNotNull(company.id());
@@ -64,14 +64,15 @@ public class CreateCategoryUseCaseTest {
         final var expectedDescription = "A categoria mais assistida";
         final var expectedIsActive = true;
         final var expectedErrorMessage = "'name' is required";
+        final var expectedErrorCount = 1;
 
         final var aCommand =
                 CreateCategoryCommand.with(expectedName, expectedDescription, expectedIsActive);
 
-        final var actualException =
-                Assertions.assertThrows(DomainException.class, () -> useCase.execute(aCommand));
+        final var notification = useCase.execute(aCommand).getLeft();
 
-        Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
+        Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
+        Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
 
         Mockito.verify(gateway, times(0)).create(any());
     }
@@ -90,7 +91,7 @@ public class CreateCategoryUseCaseTest {
 
         final var useCase = new DefaultCreateCategoryUseCase(gateway);
 
-        final var company = useCase.execute(sut);
+        final var company = useCase.execute(sut).get();
 
         Assertions.assertNotNull(company);
         Assertions.assertNotNull(company.id());
@@ -114,15 +115,18 @@ public class CreateCategoryUseCaseTest {
         final var expectedDescription = "Description sobre o filme";
         final var expectedErrorMessage = "'name' is required";
         final var expectedActive = true;
+        final var expectedErrorCount = 1;
 
         final var sut = CreateCategoryCommand.with(expectedName, expectedDescription, expectedActive);
 
         when(gateway.create(any())).thenThrow(new IllegalStateException(expectedErrorMessage));
 
-        final var actualException =
-                Assertions.assertThrows(IllegalStateException.class, () -> useCase.execute(sut));
+        final var notification = useCase.execute(sut).getLeft();
 
-        Assertions.assertEquals(expectedErrorMessage, actualException.getMessage());
+        Assertions.assertEquals(expectedErrorCount, notification.getErrors().size());
+        Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
+
+        Assertions.assertEquals(expectedErrorMessage, notification.firstError().message());
 
         Mockito.verify(gateway, times(1)).create(any());
     }
