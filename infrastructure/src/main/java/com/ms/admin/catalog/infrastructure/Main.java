@@ -19,17 +19,4 @@ public class Main {
         SpringApplication.run(WebServerConfig.class, args);
         System.out.println("Server running");
     }
-
-    @Bean
-    public ApplicationRunner runner(CategoryRepository repository) {
-        return args -> {
-            List<CategoryJpaEntity> all = repository.findAll();
-
-            Category filmes = Category.newCategory("Kung Fu Panda 4", "Melhor filmes", true);
-
-            repository.save(CategoryJpaEntity.from(filmes));
-
-            repository.deleteAll();
-        };
-    }
 }
